@@ -20,24 +20,6 @@ const tools = [
     {
         type: "function" as const,
         function: {
-            name: "exec",
-            description: "Execute a command on my pc(cachyos latest x86_64)",
-            parameters: {
-                type: "object",
-                properties: {
-                    command: {
-                        type: "string",
-                        description: "Command to execute"
-                    }
-                },
-                required: ["command"]
-            }
-        }
-    },
-
-    {
-        type: "function" as const,
-        function: {
             name: "remember",
             description: "Save perminant important information about the user, for example user preferences",
             parameters: {
@@ -57,26 +39,6 @@ const tools = [
 
 async function executeTool(call: ToolCall["function"]) {
     switch (call.name) {
-        case "exec": {
-            const command = call.arguments.command;
-
-            if (typeof command !== "string") {
-                throw new Error("exec requires a string command");
-            }
-
-
-            console.log(`$ ${command}`)
-            if(!(await rl.question("Run? [Y/n]")).toLowerCase().includes("n")) {
-                const commandResult = execSync(command).toString();
-
-                console.log(commandResult)
-
-                return String(commandResult);
-            }
-
-            return String("User rejected command run");
-        }
-
         case "remember": {
             const content = call.arguments.content
 
