@@ -51,24 +51,6 @@ const tools = [
                 required: ["content"]
             }
         }
-    },
-
-    {
-        type: "function" as const,
-        function: {
-            name: "websearch",
-            description: "searches the web and returns the results",
-            parameters: {
-                type: "object",
-                properties: {
-                    query: {
-                        type: "string",
-                        description: "the search query"
-                    }
-                },
-                required: ["query"]
-            }
-        }
     }
 
 ];
@@ -105,18 +87,6 @@ async function executeTool(call: ToolCall["function"]) {
             appendFileSync(MEMORY_FILE, "\n" + content.replaceAll("\n", " "));
 
             return "saved succesfully"
-        }
-
-        case "websearch": {
-            const query = call.arguments.query
-
-            if (typeof query !== "string") {
-                throw new Error("websearch requires a string query");
-            }
-
-            const res = await fetch(`https://etsi.me/search?q=${encodeURIComponent(query)}&format=json`);
-
-            return await res.text();
         }
 
         default:
